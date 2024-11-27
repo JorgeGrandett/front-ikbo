@@ -4,46 +4,57 @@ import { Ref, ref } from 'vue';
 import CreateProduct from './CreateProduct.vue';
 import ManageInventory from './ManageInventory.vue';
 import ListInventory from './ListInventory.vue';
+import ListInventoryStatus from './ListInventoryStatus.vue';
 
 export default {
 	name: 'Dashboard',
 	components: {
 		CreateProduct,
 		ManageInventory,
-		ListInventory
+		ListInventory,
+		ListInventoryStatus
 	},
 	setup() {
 
 		const isCreateProductVisible: Ref<boolean> = ref<boolean>(false);
 		const isManageInventoryVisible: Ref<boolean> = ref<boolean>(false);
 		const isListInventoryVisible: Ref<boolean> = ref<boolean>(false);
+		const isListInventoryStatusVisible: Ref<boolean> = ref<boolean>(false);
 
-		const openCreateProduct = ():void => {
+		const openCreateProduct = (): void => {
 			isCreateProductVisible.value = true;
 		};
 
-		const closeCreateProduct = ():void => {
+		const closeCreateProduct = (): void => {
 			isCreateProductVisible.value = false;
 		};
 
-		const openManageInventory = ():void => {
+		const openManageInventory = (): void => {
 			isManageInventoryVisible.value = true;
 		};
 
-		const closeManageInventory = ():void => {
+		const closeManageInventory = (): void => {
 			isManageInventoryVisible.value = false;
 		};
 
-		const openListInventory = ():void => {
+		const openListInventory = (): void => {
 			isListInventoryVisible.value = true;
 		};
 
-		const closeListInventory = ():void => {
+		const closeListInventory = (): void => {
 			isListInventoryVisible.value = false;
 		};
 
-		const showMainWindow = ():boolean => {
-			return !isCreateProductVisible.value && !isManageInventoryVisible.value && !isListInventoryVisible.value;
+		const openListInventoryStatus = (): void => {
+			isListInventoryStatusVisible.value = true;
+		};
+
+		const closeListInventoryStatus = (): void => {
+			isListInventoryStatusVisible.value = false;
+		};
+
+		const showMainWindow = (): boolean => {
+			return !isCreateProductVisible.value && !isManageInventoryVisible.value && !isListInventoryVisible.value && !isListInventoryStatusVisible.value;
 		};
 
 		return {
@@ -56,7 +67,10 @@ export default {
 			showMainWindow,
 			isListInventoryVisible,
 			closeListInventory,
-			openListInventory
+			openListInventory,
+			isListInventoryStatusVisible,
+			openListInventoryStatus,
+			closeListInventoryStatus
 		}
 	},
 };
@@ -82,7 +96,7 @@ export default {
 					<h3>Ver inventario</h3>
 					<img src="../assets/list_inventory.svg" alt="list">
 				</div>
-				<div class="options-container">
+				<div class="options-container" v-on:click="openListInventoryStatus">
 					<h3>Ver estado del inventario</h3>
 					<img src="../assets/list_inventory_status.svg" alt="list_status">
 				</div>
@@ -92,6 +106,7 @@ export default {
 	<CreateProduct v-if="isCreateProductVisible" @close="closeCreateProduct" />
 	<ManageInventory v-if="isManageInventoryVisible" @close="closeManageInventory" />
 	<ListInventory v-if="isListInventoryVisible" @close="closeListInventory" />
+	<ListInventoryStatus v-if="isListInventoryStatusVisible" @close="closeListInventoryStatus" />
 </template>
 
 vueinit

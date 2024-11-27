@@ -2,20 +2,20 @@
 <script lang="ts">
 import { onMounted, ref } from "vue";
 import { alert } from "../core/utils/sweetAlerts";
-import { GetInventoryUseCase } from "../core/usecases/Inventory/GetInventory";
+import { GetInventoryStatusUseCase } from "../core/usecases/Inventory/GetInventoryStatus";
 import { inventoryRepository } from "../infrastructure/HttpClient";
 
 export default {
-    name: "ListInventory",
+    name: "ListInventoryStatus",
     emits: ["close"],
     setup(_, { emit }) {
 
-        const getInventoryUseCase: GetInventoryUseCase = new GetInventoryUseCase(inventoryRepository);
+        const getInventoryStatusUseCase: GetInventoryStatusUseCase = new GetInventoryStatusUseCase(inventoryRepository);
 
         const inventoryList = ref<Array<any>>([]);
 
         onMounted(async () => {
-            inventoryList.value = await getInventoryUseCase.execute();
+            inventoryList.value = await getInventoryStatusUseCase.execute();
             if (inventoryList.value.length === 0) alert('Inventario vacío', 'No hay registros en el inventario', 'info', 'Aceptar')
         });
 
@@ -28,6 +28,17 @@ export default {
             return new Intl.DateTimeFormat('es-ES', options).format(new Date(date));
         };
 
+        const getStatusClass = (status: 'Vencido' | 'Por Vencer' | 'Vigente'): string => {
+            switch (status) {
+                case 'Vencido':
+                    return 'bg-red';
+                case 'Por Vencer':
+                    return 'bg-yellow';
+                case 'Vigente':
+                    return 'bg-green';
+            }
+        };
+
         const back = (): void => {
             emit("close");
         }
@@ -35,7 +46,8 @@ export default {
         return {
             back,
             inventoryList,
-            formatDate
+            formatDate,
+            getStatusClass
         };
     },
 };
@@ -48,7 +60,7 @@ export default {
             <div>
                 <button v-on:click="back">Volver</button>
             </div>
-            <h1>Listar inventario</h1>
+            <h1>Ver estado del inventario</h1>
         </div>
         <main>
             <table border="1">
@@ -61,6 +73,7 @@ export default {
                         <th>Lote</th>
                         <th>Cantidad</th>
                         <th>Fecha de Vencimiento</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,6 +85,7 @@ export default {
                         <td>{{ item.batch }}</td>
                         <td>{{ item.amount }}</td>
                         <td>{{ formatDate(item.expirationDate) }}</td>
+                        <td :class="getStatusClass(item.status)">{{ item.status }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -79,7 +93,6 @@ export default {
     </div>
 </template>
 
-vueinit
 <!-- CSS -->
 <style scoped>
 .tittle-container {
@@ -104,5 +117,20 @@ vueinit
     cursor: pointer;
     color: blue;
     text-decoration: underline;
+}
+
+.bg-green {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.bg-yellow {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.bg-red {
+    background-color: #f8d7da;
+    color: #721c24;
 }
 </style>
