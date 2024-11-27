@@ -8,4 +8,8 @@ export const httpClient = axios.create({
 import { ProductRepositoryImpl } from '../data/repositories/ProductRepositoryImpl';
 import { ProductRepository } from '../domain/ProductRepository';
 
+import { InventoryRepositoryImpl } from '../data/repositories/InventoryRepositoryImpl';
+import { InventoryRepository } from '../domain/InventoryRepository';
+
 export const productRepository: ProductRepository = new ProductRepositoryImpl(httpClient);
+export const inventoryRepository: InventoryRepository = new InventoryRepositoryImpl(httpClient);

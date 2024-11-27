@@ -16,4 +16,8 @@ export class HttpResponseFormat {
 	getMessage(): string | string[] {
 		return this.message;
 	}
+
+	getData(): any {
+		return this.data;
+	}
 }

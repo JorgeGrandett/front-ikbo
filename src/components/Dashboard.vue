@@ -2,28 +2,61 @@
 <script lang="ts">
 import { Ref, ref } from 'vue';
 import CreateProduct from './CreateProduct.vue';
+import ManageInventory from './ManageInventory.vue';
+import ListInventory from './ListInventory.vue';
 
 export default {
 	name: 'Dashboard',
 	components: {
-		CreateProduct
+		CreateProduct,
+		ManageInventory,
+		ListInventory
 	},
 	setup() {
 
 		const isCreateProductVisible: Ref<boolean> = ref<boolean>(false);
+		const isManageInventoryVisible: Ref<boolean> = ref<boolean>(false);
+		const isListInventoryVisible: Ref<boolean> = ref<boolean>(false);
 
-		function openCreateProduct() {
+		const openCreateProduct = ():void => {
 			isCreateProductVisible.value = true;
-		}
+		};
 
-		function closeCreateProduct() {
+		const closeCreateProduct = ():void => {
 			isCreateProductVisible.value = false;
-		}
+		};
+
+		const openManageInventory = ():void => {
+			isManageInventoryVisible.value = true;
+		};
+
+		const closeManageInventory = ():void => {
+			isManageInventoryVisible.value = false;
+		};
+
+		const openListInventory = ():void => {
+			isListInventoryVisible.value = true;
+		};
+
+		const closeListInventory = ():void => {
+			isListInventoryVisible.value = false;
+		};
+
+		const showMainWindow = ():boolean => {
+			return !isCreateProductVisible.value && !isManageInventoryVisible.value && !isListInventoryVisible.value;
+		};
 
 		return {
 			openCreateProduct,
 			closeCreateProduct,
-			isCreateProductVisible
+			isCreateProductVisible,
+			isManageInventoryVisible,
+			openManageInventory,
+			closeManageInventory,
+			showMainWindow,
+			isListInventoryVisible,
+			closeListInventory,
+			openListInventory
 		}
 	},
 };
@@ -31,7 +64,7 @@ export default {
 
 <!-- HTML -->
 <template>
-	<div class="main-frame" v-if="!isCreateProductVisible">
+	<div class="main-frame" v-if="showMainWindow()">
 		<div class="tittle-container">
 			<h1>Gestión de inventario IKBO</h1>
 		</div>
@@ -41,11 +74,11 @@ export default {
 					<h3>Crear producto</h3>
 					<img src="../assets/create.svg" alt="create">
 				</div>
-				<div class="options-container">
+				<div class="options-container" v-on:click="openManageInventory">
 					<h3>Gestionar inventario</h3>
 					<img src="../assets/manage_inventory.svg" alt="manage">
 				</div>
-				<div class="options-container">
+				<div class="options-container" v-on:click="openListInventory">
 					<h3>Ver inventario</h3>
 					<img src="../assets/list_inventory.svg" alt="list">
 				</div>
@@ -57,6 +90,8 @@ export default {
 		</main>
 	</div>
 	<CreateProduct v-if="isCreateProductVisible" @close="closeCreateProduct" />
+	<ManageInventory v-if="isManageInventoryVisible" @close="closeManageInventory" />
+	<ListInventory v-if="isListInventoryVisible" @close="closeListInventory" />
 </template>
 
 vueinit

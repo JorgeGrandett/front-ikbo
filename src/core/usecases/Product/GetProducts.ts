@@ -3,17 +3,17 @@ import { ProductRepository } from '../../../domain/ProductRepository';
 import { alert } from '../../../core/utils/sweetAlerts';
 import { HttpResponseFormat } from '../../entities/responseFormat';
 
-export class CreateProduct {
+export class GetProducts {
 	constructor(private productRepository: ProductRepository) { };
 
-	async execute(product: Product): Promise<boolean> {
+	async execute(): Promise<Array<Product>> {
 		try {
-			const response: HttpResponseFormat = await this.productRepository.createProduct(product);
-			alert('Producto creado', response.getMessage().toString(), 'success', 'Aceptar');
-			return true;
+			const response: HttpResponseFormat = await this.productRepository.getProducts();
+			
+			return response.getData();
 		} catch (error: any) {
 			alert('Error', error.response.data.message, 'error', 'Aceptar');
-			return false;
+			return [];
 		}
 	};
 }

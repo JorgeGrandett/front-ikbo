@@ -17,7 +17,7 @@ export default {
 		const productName: Ref<string> = ref<string>('');
 		const productBarcode: Ref<string> = ref<string>('');
 
-		async function create() {
+		const create = async():Promise<void> => {
 			if (!validateFormat(productName.value, new RegExp(/^[a-zA-Z0-9\s]{1,100}$/)) || !validateFormat(productBarcode.value, new RegExp(/^\d{1,50}$/))) {
 				alert('Error', 'Campos faltantes o incorrectos', 'warning', 'Aceptar');
 				return;
@@ -25,9 +25,9 @@ export default {
 
 			const product = new Product(0, productName.value, productBarcode.value);
 			if(await createProductUseCase.execute(product)) back();
-		}
+		};
 
-		function back() {
+		const back = ():void => {
 			emit('close');
 		};
 
