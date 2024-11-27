@@ -4,5 +4,4 @@ import Dashboard from './components/Dashboard.vue';
 
 <template>
   <Dashboard/>
-  <HelloWorld msg="Vite + Vue" />
 </template>

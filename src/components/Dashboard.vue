@@ -1,17 +1,98 @@
 <!-- TYPESCRIPT -->
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { Ref, ref } from 'vue';
+import CreateProduct from './CreateProduct.vue';
 
+export default {
+	name: 'Dashboard',
+	components: {
+		CreateProduct
+	},
+	setup() {
+
+		const isCreateProductVisible: Ref<boolean> = ref<boolean>(false);
+
+		function openCreateProduct() {
+			isCreateProductVisible.value = true;
+		}
+
+		function closeCreateProduct() {
+			isCreateProductVisible.value = false;
+		}
+
+		return {
+			openCreateProduct,
+			closeCreateProduct,
+			isCreateProductVisible
+		}
+	},
+};
 </script>
 
 <!-- HTML -->
 <template>
-    <div class="main-frame">
-        <h2>Este es mi dashboard</h2>
-    </div>
+	<div class="main-frame" v-if="!isCreateProductVisible">
+		<div class="tittle-container">
+			<h1>Gestión de inventario IKBO</h1>
+		</div>
+		<main>
+			<section class="options">
+				<div class="options-container" v-on:click="openCreateProduct">
+					<h3>Crear producto</h3>
+					<img src="../assets/create.svg" alt="create">
+				</div>
+				<div class="options-container">
+					<h3>Gestionar inventario</h3>
+					<img src="../assets/manage_inventory.svg" alt="manage">
+				</div>
+				<div class="options-container">
+					<h3>Ver inventario</h3>
+					<img src="../assets/list_inventory.svg" alt="list">
+				</div>
+				<div class="options-container">
+					<h3>Ver estado del inventario</h3>
+					<img src="../assets/list_inventory_status.svg" alt="list_status">
+				</div>
+			</section>
+		</main>
+	</div>
+	<CreateProduct v-if="isCreateProductVisible" @close="closeCreateProduct" />
 </template>
 
-
+vueinit
 <!-- CSS -->
 <style scoped>
+.tittle-container {
+	margin-top: 2em;
+	display: flex;
+	justify-content: center;
+}
+
+.options {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.options-container {
+	margin-top: 5em;
+	cursor: pointer;
+	border: 1px solid rgb(210, 210, 210);
+	width: 20vw;
+	height: 25vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	background-color: rgb(207, 228, 247);
+}
+
+.options-container h3 {
+	font-size: larger;
+}
+
+.options-container img {
+	width: 5em;
+	height: 5em;
+}
 </style>
